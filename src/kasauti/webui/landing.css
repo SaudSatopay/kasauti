@@ -11,16 +11,20 @@
 .lede code, .card code { font-family: var(--font-mono); color: var(--gold-2); font-size: .92em; }
 
 /* ── Hero ── */
-.hero { min-height: 92vh; display: flex; align-items: center; position: relative; padding: 40px 0 60px; overflow: hidden; }
+/* overflow stays visible so the cursor spotlight and aurora glow are not
+   clipped into a hard edge right under the nav (body already hides x-overflow). */
+.hero { min-height: 92vh; display: flex; align-items: center; position: relative; padding: 40px 0 60px; }
 .hero::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
+  content: ""; position: absolute; inset: -140px 0 0 0; pointer-events: none;
   background: radial-gradient(520px 520px at var(--mx, 60%) var(--my, 40%), rgba(212, 166, 63, .13), transparent 62%);
   transition: background .12s;
 }
 .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(28px, 5vw, 70px); align-items: center; width: 100%; }
-/* Devanagari's headline stroke sits above the em box — give the eyebrow room. */
-.wordmark-xl { font-family: var(--font-hindi); font-weight: 800; font-size: clamp(5rem, 13vw, 9.5rem); line-height: 1.02; margin-top: 30px; letter-spacing: -.01em; }
-.hero .eyebrow { margin-bottom: 6px; }
+/* Devanagari's headline stroke and matra flags sit above the em box: a line
+   box of ~1.3 keeps them inside it instead of overlapping the eyebrow. */
+.wordmark-xl { font-family: var(--font-hindi); font-weight: 800; font-size: clamp(5rem, 13vw, 9.5rem); line-height: 1.3; margin-top: 8px; letter-spacing: -.01em; }
+.wordmark-xl .gold-text { display: inline-block; padding-top: .25em; margin-top: -.25em; }
+.hero .eyebrow { margin-bottom: 4px; }
 .latmark { font-family: var(--font-caps); font-weight: 700; font-size: clamp(.8rem, 1.4vw, 1rem); letter-spacing: .5em; color: var(--gold); margin: 10px 0 18px; }
 .hero h1 {
   font-family: var(--font-display); font-weight: 900; font-variation-settings: "SOFT" 60, "WONK" 1;
