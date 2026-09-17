@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
 
 
@@ -27,6 +27,21 @@ class LLMConfig:
     api_key: str
     model: str
     provider: str
+    # Extra params merged into every request body (via the OpenAI SDK's
+    # extra_body). Used to disable Gemini's thinking mode, which otherwise
+    # adds 30–60s of latency per call and causes silent timeout fallbacks.
+    extra_params: dict[str, Any] = field(default_factory=dict)
+
+
+def _gemini_extra() -> dict[str, Any]:
+    """reasoning_effort='none' turns off 2.5-flash thinking → ~2s calls.
+    Overridable via KASAUTI_GEMINI_THINKING (none|low|medium|high)."""
+    effort = os.getenv("KASAUTI_GEMINI_THINKING", "none").strip().lower()
+    return {"reasoning_effort": effort} if effort in {"none", "low", "medium", "high"} else {}
+
+
+def _is_gemini(base_url: str) -> bool:
+    return "generativelanguage.googleapis.com" in base_url
 
 
 _AUTO_PROVIDERS: list[tuple[str, str, str, str]] = [
@@ -58,13 +73,17 @@ def resolve_config() -> Optional[LLMConfig]:
     key = os.getenv("KASAUTI_LLM_API_KEY", "").strip()
     model = os.getenv("KASAUTI_LLM_MODEL", "").strip()
     if base and model:
-        return LLMConfig(base_url=base, api_key=key or "not-needed", model=model, provider="custom")
+        return LLMConfig(
+            base_url=base, api_key=key or "not-needed", model=model, provider="custom",
+            extra_params=_gemini_extra() if _is_gemini(base) else {},
+        )
 
     for env, url, default_model, provider in _AUTO_PROVIDERS:
         value = os.getenv(env, "").strip()
         if value:
             return LLMConfig(
-                base_url=url, api_key=value, model=model or default_model, provider=provider
+                base_url=url, api_key=value, model=model or default_model, provider=provider,
+                extra_params=_gemini_extra() if _is_gemini(url) else {},
             )
 
     ollama_model = os.getenv("KASAUTI_OLLAMA_MODEL", "").strip()
@@ -116,7 +135,7 @@ class LLM:
                 self._client = OpenAI(
                     base_url=self.config.base_url,
                     api_key=self.config.api_key,
-                    timeout=60.0,
+                    timeout=float(os.getenv("KASAUTI_LLM_TIMEOUT", "45")),
                     max_retries=1,
                 )
             except Exception:  # pragma: no cover - missing dep / bad env
@@ -141,6 +160,7 @@ class LLM:
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ]
+        extra = self.config.extra_params or {}
         for attempt in range(2):
             try:
                 resp = self._client.chat.completions.create(
@@ -148,6 +168,7 @@ class LLM:
                     messages=messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    extra_body=extra or None,
                 )
                 raw = (resp.choices[0].message.content or "").strip()
             except Exception:

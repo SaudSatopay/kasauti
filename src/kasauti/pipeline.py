@@ -143,15 +143,30 @@ def check(
     _emit(on_event, "evidence",
           f"{len(all_evidence)} distinct sources kept after deduplication.")
 
-    # 5 — verdicts
+    # 5 — verdicts (one independent LLM call per claim → run them in parallel)
     _emit(on_event, "verdicts", "Judging each claim against the evidence…")
-    verdicts = []
-    for claim in searchable:
-        v = judge_claim(claim, evidence_by_claim.get(claim.id, []),
-                        llm=llm, image=image_analysis)
-        verdicts.append(v)
-        _emit(on_event, "verdicts",
-              f"{claim.id}: {v.label.display} ({v.confidence:.0%})")
+    verdicts: list = [None] * len(searchable)
+    if len(searchable) <= 1:
+        for i, claim in enumerate(searchable):
+            verdicts[i] = judge_claim(claim, evidence_by_claim.get(claim.id, []),
+                                      llm=llm, image=image_analysis)
+    else:
+        with ThreadPoolExecutor(max_workers=min(4, len(searchable))) as pool:
+            futs = {
+                pool.submit(judge_claim, claim, evidence_by_claim.get(claim.id, []),
+                            llm=llm, image=image_analysis): i
+                for i, claim in enumerate(searchable)
+            }
+            for fut in futs:
+                i = futs[fut]
+                try:
+                    verdicts[i] = fut.result()
+                except Exception:
+                    verdicts[i] = judge_claim(searchable[i],
+                                              evidence_by_claim.get(searchable[i].id, []),
+                                              llm=None, image=image_analysis)
+    for claim, v in zip(searchable, verdicts):
+        _emit(on_event, "verdicts", f"{claim.id}: {v.label.display} ({v.confidence:.0%})")
 
     label, confidence = overall_verdict(verdicts)
 

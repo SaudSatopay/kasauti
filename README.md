@@ -10,7 +10,7 @@ across live evidence from the entire web, and read the mark.*
 
 `Check karo, phir forward karo.` · *Verify before you amplify.*
 
-[![tests](https://img.shields.io/badge/tests-56%20passing-2e7d4f)](#-tests)
+[![tests](https://img.shields.io/badge/tests-61%20passing-2e7d4f)](#-tests)
 [![python](https://img.shields.io/badge/python-3.10%2B-d4a63f)](#-quickstart)
 [![powered by SerpApi](https://img.shields.io/badge/evidence%20by-SerpApi-1a73e8)](https://serpapi.com)
 [![license](https://img.shields.io/badge/license-MIT-6b6560)](LICENSE)
@@ -197,7 +197,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-56 tests cover the fingerprint heuristics (English + Hinglish + Devanagari),
+61 tests cover the fingerprint heuristics (English + Hinglish + Devanagari),
 source tiering, date parsing for every format SerpApi emits, dedup and
 ranking, verdict guardrails, both fallback paths, the streaming API, and two
 end-to-end pipeline runs — all against bundled SerpApi-shaped fixtures:
