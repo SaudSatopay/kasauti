@@ -3,75 +3,304 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kasauti — the touchstone for forwards</title>
-<meta name="description" content="Kasauti (कसौटी) — evidence-first misinformation checking for India, powered by SerpApi.">
+<title>Kasauti — the touchstone for WhatsApp forwards</title>
+<meta name="description" content="Kasauti (कसौटी): paste any WhatsApp forward — Hindi, Hinglish, English, with or without a photo — and get an evidence-first verdict with receipts. Powered by SerpApi.">
+<meta property="og:title" content="Kasauti — the touchstone for WhatsApp forwards">
+<meta property="og:description" content="Gold is tested on a touchstone. So are forwards. Evidence-first misinformation checking for India, powered by SerpApi.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@600;800&family=Anek+Latin:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@600;800&family=Anek+Latin:wght@400;500;600;700;800&family=Cinzel:wght@700;900&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700;1,9..144,900&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="landing.css?v=2">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23141114'/><path d='M18 62 Q 50 48 82 56' stroke='%23d4a63f' stroke-width='9' fill='none' stroke-linecap='round'/></svg>">
 </head>
 <body>
+<div class="bg-aurora" aria-hidden="true"></div>
+<canvas id="dust" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 
-<header class="masthead">
-  <div class="wordmark">
-    <span class="devanagari">कसौटी</span>
-    <span class="latin">KASAUTI</span>
+<nav class="nav">
+  <a class="brand" href="#top" aria-label="Kasauti">
+    <span class="dev">कसौटी</span><span class="lat">KASAUTI</span>
+  </a>
+  <div class="nav-links">
+    <a href="#why">Why</a>
+    <a href="#how">How it works</a>
+    <a href="#lens">Lens</a>
+    <a href="#engines">SerpApi engines</a>
+    <a href="https://github.com/SaudSatopay/kasauti" target="_blank" rel="noopener">GitHub</a>
   </div>
-  <svg class="streak" viewBox="0 0 320 14" aria-hidden="true" preserveAspectRatio="none">
-    <path d="M4 10 Q 90 2 160 7 T 316 5" fill="none" stroke="url(#goldgrad)" stroke-width="5" stroke-linecap="round"/>
-    <defs>
-      <linearGradient id="goldgrad" x1="0" x2="1">
-        <stop offset="0" stop-color="#8a641c"/>
-        <stop offset="0.35" stop-color="#f0c75e"/>
-        <stop offset="0.7" stop-color="#c89a35"/>
-        <stop offset="1" stop-color="#7c5a18"/>
-      </linearGradient>
-    </defs>
-  </svg>
-  <p class="tagline">Gold is tested on a touchstone. So are forwards.<br>
-    <em>Check karo, phir forward karo.</em></p>
-</header>
+  <a class="btn-gold" href="/app"><span>Test a forward →</span></a>
+</nav>
 
 <main>
-  <div id="banner" class="banner" hidden></div>
-
-  <section class="composer" aria-label="Paste a forward">
-    <div class="bubble">
-      <div class="fwd-tag">↪ Forwarded many times</div>
-      <textarea id="text" rows="5" spellcheck="false"
-        placeholder="Paste the WhatsApp forward here… Hindi, Hinglish, English — sab chalega."></textarea>
-      <div class="attach-row">
-        <input id="image" type="url" placeholder="🖼 optional: paste the image's URL for a reverse-image check">
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" id="top" data-spotlight>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow reveal">SerpApi India Hackathon 2026 · Public Interest</div>
+      <div class="wordmark-xl reveal" style="--d:80ms"><span class="gold-text">कसौटी</span></div>
+      <div class="latmark reveal" style="--d:140ms">K A S A U T I</div>
+      <h1 class="reveal" style="--d:200ms">Gold is tested on a touchstone.<br><em>So are forwards.</em></h1>
+      <p class="lead reveal" style="--d:280ms">
+        Paste any WhatsApp forward — Hindi, Hinglish, English, with or without a photo.
+        Kasauti streaks it against the live web through <strong>SerpApi</strong>, weighs every
+        source by credibility, stamps a verdict with receipts — and drafts the polite reply
+        you can actually send back to the family group.
+      </p>
+      <div class="cta-row reveal" style="--d:360ms">
+        <a class="btn-gold" href="/app"><span>Test it on the stone</span><span class="sub">कसौटी पर कसें</span></a>
+        <a class="btn-ghost" href="#how">See how it works ↓</a>
+      </div>
+      <div class="trust reveal" style="--d:440ms">
+        <span><b>3</b> SerpApi engines</span><i></i>
+        <span><b>4</b> retrieval strategies</span><i></i>
+        <span><b>65</b> offline tests</span><i></i>
+        <span><b>0</b> credits to run CI</span>
       </div>
     </div>
-    <div class="composer-actions">
-      <div class="chips" id="chips" aria-label="Example forwards"></div>
-      <button id="go" class="test-btn">
-        <span class="btn-label">Test it on the stone</span>
-        <span class="btn-sub">कसौटी पर कसें</span>
-      </button>
+
+    <div class="hero-visual reveal" style="--d:300ms">
+      <div class="halo" aria-hidden="true"></div>
+      <span class="shard s1" aria-hidden="true">✦</span>
+      <span class="shard s2" aria-hidden="true">✦</span>
+      <span class="shard s3" aria-hidden="true">✧</span>
+      <span class="shard s4" aria-hidden="true">✦</span>
+      <span class="shard s5" aria-hidden="true">✧</span>
+
+      <div class="phone" aria-label="Live demo: a forward being stamped">
+        <div class="phone-top">
+          <span class="avatar">👨‍👩‍👧‍👦</span>
+          <span><b>Family Group</b><small>47 participants · online</small></span>
+          <span class="dots">⋮</span>
+        </div>
+        <div class="phone-screen" id="scenes"></div>
+        <div class="phone-input"><span>Type a message</span><span class="mic">🎤</span></div>
+      </div>
     </div>
-  </section>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span></span></div>
+</section>
 
-  <section id="log" class="assay-log" hidden aria-live="polite">
-    <div class="log-title">ASSAY IN PROGRESS</div>
-    <ol id="log-lines"></ol>
-  </section>
+<!-- ═══════════ TICKER ═══════════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="track" id="ticker-track">
+    <span><q>UNESCO declared our anthem the best in the world</q><b class="vc vc-false">False</b></span>
+    <span><q>Modi sarkar giving FREE ₹719 recharge — click the link</q><b class="vc vc-false">Scam</b></span>
+    <span><q>Garam nimbu pani cures cancer 100%</q><b class="vc vc-false">False</b></span>
+    <span><q>Shocking visuals from today's cyclone</q><b class="vc vc-outdated">Outdated · 2004</b></span>
+    <span><q>WhatsApp will start charging from tomorrow</q><b class="vc vc-false">False</b></span>
+    <span><q>NASA: India visible from space on Diwali</q><b class="vc vc-false">False</b></span>
+    <span><q>Forward to 10 people or face bad luck</q><b class="vc vc-unverified">Chain</b></span>
+    <span><q>₹10,000 fine for no helmet from Monday</q><b class="vc vc-misleading">Misleading</b></span>
+  </div>
+</div>
 
-  <section id="result" hidden></section>
+<!-- ═══════════ WHY ═══════════ -->
+<section class="sec" id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">The problem</div>
+      <h2>The debunk exists. <em>Your uncle never sees it.</em></h2>
+      <p class="lede">India is the world's largest WhatsApp market, and the family group is where misinformation lives its best life. Fact-checkers debunk daily — on websites. The hoax lives in your pocket, twelve forwards deep, in Hinglish, demanding to be sent to ten more groups.</p>
+    </div>
+    <div class="cards-3">
+      <article class="glass card reveal" style="--d:0ms">
+        <div class="card-num">01</div>
+        <h3>The gap is distribution, not facts.</h3>
+        <p>Alt News, BOOM, Factly, Vishvas News have already checked most viral claims. Kasauti sweeps eight Indian fact-check desks in a single SerpApi query and puts their finding where the hoax is.</p>
+      </article>
+      <article class="glass card reveal" style="--d:120ms">
+        <div class="card-num">02</div>
+        <h3>Real photo. Fake caption.</h3>
+        <p>The #1 misinformation format isn't fabricated images — it's genuine photos from old tragedies relabelled as today's news. Google Lens through SerpApi exposes an image's other lives.</p>
+      </article>
+      <article class="glass card reveal" style="--d:240ms">
+        <div class="card-num">03</div>
+        <h3>Being right isn't enough.</h3>
+        <p>The social cost of correcting an elder is why hoaxes win. Kasauti drafts a warm, receipts-attached reply in the language of the forward. Blame the message, never the person.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW ═══════════ -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>Six stages. <em>One touchstone.</em></h2>
+      <p class="lede">Every stage is deterministic, reviewable code — the LLM drafts, the code decides what it's allowed to claim.</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tl-line" aria-hidden="true"></div>
+      <div class="stages">
+        <div class="stage-card glass reveal" style="--d:0ms"><span class="n">I</span><h4>Forward Fingerprint</h4><p>Offline heuristics score chain-message DNA in English, Hinglish &amp; Devanagari — forwarding pleas, "media is hiding this", miracle cures, emoji storms.</p></div>
+        <div class="stage-card glass reveal" style="--d:100ms"><span class="n">II</span><h4>Claim extraction</h4><p>An LLM splits the forward into atomic, checkable claims with diverse search queries. Rule-based fallback works with no LLM at all.</p></div>
+        <div class="stage-card glass reveal" style="--d:200ms"><span class="n">III</span><h4>Evidence retrieval</h4><p>Four strategies on three SerpApi engines, in parallel: organic web, Google News, a fact-check desk sweep, Google Lens.</p></div>
+        <div class="stage-card glass reveal" style="--d:300ms"><span class="n">IV</span><h4>Credibility weighting</h4><p>A transparent registry ranks every source: fact-checkers and PIB outrank blogs; satire sites get flagged as satire.</p></div>
+        <div class="stage-card glass reveal" style="--d:400ms"><span class="n">V</span><h4>Verdict + guardrails</h4><p>An LLM judge reads the numbered evidence table — then code caps its confidence to what the evidence supports.</p></div>
+        <div class="stage-card glass reveal" style="--d:500ms"><span class="n">VI</span><h4>Reply for the group</h4><p>A polite, non-preachy correction in the forward's own language, with the two most credible links attached.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LENS ═══════════ -->
+<section class="sec" id="lens">
+  <div class="wrap split">
+    <div class="split-copy reveal">
+      <div class="eyebrow">Google Lens · via SerpApi</div>
+      <h2>The 2004 tsunami is <em>not</em> today's cyclone.</h2>
+      <p class="lede">Attach an image URL and Kasauti runs it through Google Lens, maps where else the photo lives, and reads the years its match titles keep citing — even when no page carries a machine-readable date.</p>
+      <ul class="ticks">
+        <li>Earliest-appearance timeline from dated matches</li>
+        <li>Title-year heuristic: "2004 Indian Ocean tsunami — Wikipedia" is a tell</li>
+        <li>Matches become citable evidence in the verdict</li>
+      </ul>
+      <a class="btn-ghost" data-demo="cyclone" href="/app">Run this exact check →</a>
+    </div>
+    <div class="lens-visual reveal" style="--d:150ms">
+      <div class="lens-card">
+        <img src="assets/tsunami-2004.jpg" alt="Aerial photo of tsunami devastation, Sumatra, January 2005 (US Navy, public domain)" loading="lazy">
+        <div class="scanline" aria-hidden="true"></div>
+        <div class="caption">“Massive destruction on the Tamil Nadu coast RIGHT NOW!!”</div>
+      </div>
+      <div class="callout c1">🔎 <b>20 matches</b> across 19 sites</div>
+      <div class="callout c2">📚 Wikipedia · <b>2004 Indian Ocean tsunami</b></div>
+      <div class="callout c3">📅 titles reference <b>2004</b></div>
+      <div class="stamp-mini outdated">OUTDATED<span class="hi">पुरानी खबर</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LADDER ═══════════ -->
+<section class="sec" id="ladder">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Credibility weighting</div>
+      <h2>Not all search results <em>are equal.</em></h2>
+      <p class="lede">Every result is weighted by its publisher's category — a transparent, PR-able registry of ~90 domains in eight tiers. It encodes publisher <em>type</em>, never editorial stance.</p>
+    </div>
+    <div class="ladder glass reveal">
+      <div class="row" style="--w:100%;--c:#2f8a55;--i:0"><span class="t">Fact-checker</span><div class="bar"><i></i></div><span class="w">1.00</span><span class="ex">Alt News · BOOM · Factly · Vishvas News · AFP</span></div>
+      <div class="row" style="--w:95%;--c:#3b6fb5;--i:1"><span class="t">Official</span><div class="bar"><i></i></div><span class="w">0.95</span><span class="ex">PIB · *.gov.in · RBI · WHO</span></div>
+      <div class="row" style="--w:85%;--c:#6a5ac7;--i:2"><span class="t">News agency</span><div class="bar"><i></i></div><span class="w">0.85</span><span class="ex">Reuters · PTI · ANI · AP</span></div>
+      <div class="row" style="--w:80%;--c:#7c6ad1;--i:3"><span class="t">International</span><div class="bar"><i></i></div><span class="w">0.80</span><span class="ex">BBC · Guardian · Al Jazeera</span></div>
+      <div class="row" style="--w:75%;--c:#d4a63f;--i:4"><span class="t">National</span><div class="bar"><i></i></div><span class="w">0.75</span><span class="ex">The Hindu · Indian Express · NDTV · Jagran</span></div>
+      <div class="row" style="--w:60%;--c:#5f8ea6;--i:5"><span class="t">Reference</span><div class="bar"><i></i></div><span class="w">0.60</span><span class="ex">Wikipedia · Wikimedia · Britannica — strong for image provenance</span></div>
+      <div class="row" style="--w:55%;--c:#a08b6a;--i:6"><span class="t">Regional</span><div class="bar"><i></i></div><span class="w">0.55</span><span class="ex">recognised regional outlets</span></div>
+      <div class="row" style="--w:35%;--c:#7a736c;--i:7"><span class="t">Unknown</span><div class="bar"><i></i></div><span class="w">0.35</span><span class="ex">weak evidence — never anti-evidence</span></div>
+      <div class="row" style="--w:20%;--c:#8b63b8;--i:8"><span class="t">Satire</span><div class="bar"><i></i></div><span class="w">0.20</span><span class="ex">Faking News · The Onion → verdict flips to SATIRE</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ GUARDRAILS ═══════════ -->
+<section class="sec" id="guardrails">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Guardrails</div>
+      <h2>The model proposes. <em>The code disposes.</em></h2>
+      <p class="lede">A misinformation checker that hallucinates is worse than none. Confidence caps are enforced <em>after</em> the model answers — calibration you can read in the certificate.</p>
+    </div>
+    <div class="cards-4">
+      <article class="glass card reveal" style="--d:0ms"><code>if not citations</code><h3>→ UNVERIFIED</h3><p>An uncited verdict is downgraded, whatever the model felt about it. Confidence ≤ 0.35.</p></article>
+      <article class="glass card reveal" style="--d:100ms"><code>only unknown sources</code><h3>→ conf ≤ 0.55</h3><p>No recognised newsroom, fact-checker or official among the citations? Capped.</p></article>
+      <article class="glass card reveal" style="--d:200ms"><code>true/false &gt; 0.8</code><h3>→ needs a fact-checker</h3><p>A definitive verdict above 80% requires a fact-checker or official source directly on point.</p></article>
+      <article class="glass card reveal" style="--d:300ms"><code>satire cited</code><h3>→ SATIRE</h3><p>Sometimes the forward is a Faking News post taken literally. The label says so.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ REPLY ═══════════ -->
+<section class="sec" id="reply">
+  <div class="wrap split">
+    <div class="split-copy reveal">
+      <div class="eyebrow">The human feature</div>
+      <h2>Tell your uncle. <em>Nicely.</em></h2>
+      <p class="lede">Knowing a forward is fake is half the battle. Kasauti drafts a warm, ≤75-word correction in the language of the forward — Hinglish in, Hinglish out — with the two most credible links. One tap to copy, paste it in the group, izzat intact.</p>
+    </div>
+    <div class="reply-demo reveal" style="--d:150ms">
+      <div class="wa-bubble in"><small>Uncle ji · 9:41 PM</small>Good news!! UNESCO has declared our JANA GANA MANA the BEST NATIONAL ANTHEM in the world!! 🇮🇳🎉 Forward to every Indian!!</div>
+      <div class="wa-bubble out"><small>You · 9:43 PM</small><span id="typed"></span><span class="caret">▍</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ DOORS ═══════════ -->
+<section class="sec" id="doors">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Four doors, one pipeline</div>
+      <h2>Web app. CLI. Library. <em>MCP server.</em></h2>
+      <p class="lede">One <code>check()</code> function behind every interface — including an MCP server, so any AI assistant gains a fact-checking tool.</p>
+    </div>
+    <div class="cards-4">
+      <article class="glass card code reveal" style="--d:0ms"><h3>Web</h3><pre>kasauti serve
+<span class="c"># → http://127.0.0.1:7860/app</span></pre></article>
+      <article class="glass card code reveal" style="--d:100ms"><h3>CLI</h3><pre>kasauti check "UNESCO ne anthem
+  ko best declare kiya!" --json</pre></article>
+      <article class="glass card code reveal" style="--d:200ms"><h3>Python</h3><pre>from kasauti import check
+r = check("Free ₹719 recharge!")
+r.overall_label  <span class="c"># FALSE</span></pre></article>
+      <article class="glass card code reveal" style="--d:300ms"><h3>MCP</h3><pre>{ "mcpServers": { "kasauti":
+  { "command": "kasauti",
+    "args": ["mcp"] } } }</pre></article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ ENGINES ═══════════ -->
+<section class="sec" id="engines">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Powered by SerpApi</div>
+      <h2>SerpApi is the <em>evidence engine.</em></h2>
+      <p class="lede">Not an add-on. Every fact the verdict cites was retrieved live through it — structured JSON, no scraping, no CAPTCHAs, one clean module.</p>
+    </div>
+    <div class="medallions">
+      <div class="medal reveal" style="--d:0ms"><div class="orbit"></div><div class="disc"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></div><b>Google Search</b><span>organic web · google.co.in · gl=in</span></div>
+      <div class="medal reveal" style="--d:120ms"><div class="orbit"></div><div class="disc"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 9h10M7 13h10M7 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><b>Google News</b><span>freshness &amp; provenance</span></div>
+      <div class="medal reveal" style="--d:240ms"><div class="orbit"></div><div class="disc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5v3M12 17.5v3M3.5 12h3M17.5 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><b>Google Lens</b><span>reverse image · earliest appearance</span></div>
+    </div>
+    <div class="glass strategies reveal">
+      <div class="srow head"><span>#</span><span>Engine</span><span>Strategy</span><span>Why it's essential</span></div>
+      <div class="srow"><span>1</span><span>google</span><span>Organic results per claim</span><span>Is anyone credible reporting this at all? India-localised so regional coverage surfaces.</span></div>
+      <div class="srow"><span>2</span><span>google_news</span><span>News coverage per claim</span><span>Real events leave a news trail within hours; hoaxes leave a trail of debunks.</span></div>
+      <div class="srow"><span>3</span><span>google + site:</span><span>One sweep across 8 Indian fact-check desks</span><span>If a desk has already checked the exact claim, that finding should settle it — and it usually has.</span></div>
+      <div class="srow"><span>4</span><span>google_lens</span><span>Reverse image on attached photos</span><span>Catches the old-photo-as-breaking-news format by dating the image's earlier appearances.</span></div>
+    </div>
+    <p class="budget reveal">One check ≈ <b>3–7 searches</b> → <b>40–80 checks a month on a free key</b>. A budget counter prints on every certificate; responses are disk-cached; the whole test suite runs on bundled fixtures — <b>zero credits to develop, test or CI</b>.</p>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section class="sec cta" id="cta">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b data-count="3">0</b><span>SerpApi engines</span></div>
+      <div class="stat"><b data-count="4">0</b><span>retrieval strategies</span></div>
+      <div class="stat"><b data-count="65">0</b><span>offline tests</span></div>
+      <div class="stat"><b data-count="7">0</b><span>verdict labels</span></div>
+    </div>
+    <h2 class="big reveal"><span class="gold-text">Check karo,</span><br>phir forward karo.</h2>
+    <p class="lede reveal">Verify before you amplify.</p>
+    <div class="cta-row center reveal">
+      <a class="btn-gold big" href="/app"><span>Open the touchstone</span><span class="sub">कसौटी पर कसें</span></a>
+      <a class="btn-ghost" data-demo="unesco" href="/app">Try the UNESCO hoax →</a>
+    </div>
+  </div>
+</section>
 </main>
 
-<footer class="colophon">
-  <p><strong>Kasauti</strong> assists your judgement — it never replaces it.
-     Every verdict links its evidence; read before you rely.</p>
-  <p class="fine">Evidence retrieved live via <a href="https://serpapi.com" rel="noopener" target="_blank">SerpApi</a>
-     — Google Search · Google News · Google Lens. Built for the SerpApi India Hackathon 2026,
-     <em>Knowledge&nbsp;&amp;&nbsp;Public&nbsp;Interest</em> track.</p>
+<footer class="site-foot">
+  <div><strong>Kasauti</strong> assists your judgement — it never replaces it. Every verdict links its evidence; read before you rely.</div>
+  <div><a href="https://github.com/SaudSatopay/kasauti" target="_blank" rel="noopener">GitHub</a> · <a href="/app">Checker</a> · MIT</div>
+  <div class="fine">Built for the <a href="https://serpapi.github.io/serpapi-india-hackathon-2026/" target="_blank" rel="noopener">SerpApi India Hackathon 2026</a> — Knowledge &amp; Public Interest track. Evidence via SerpApi: Google Search · Google News · Google Lens. The source registry classifies publishers by type, never by editorial stance.</div>
 </footer>
 
-<template id="tpl-report"></template>
-<script src="app.js"></script>
+<script src="fx.js?v=2"></script>
+<script src="landing.js?v=2"></script>
 </body>
 </html>

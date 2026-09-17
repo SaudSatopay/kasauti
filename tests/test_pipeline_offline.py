@@ -59,8 +59,17 @@ def test_image_check_detects_recycled_photo():
     assert "2004" in (report.image.note or "")
     # Lens matches become citable evidence items.
     assert any(e.channel == "lens" for e in report.evidence)
-    # 3 text searches + 1 lens search.
+    # 3 text searches + 1 lens search; the photo claim costs no extra searches.
     assert report.searches_used == 4
+    # A forward with a photo always carries the "this photo shows the event"
+    # claim; a 2004 photo makes the whole forward OUTDATED even though the
+    # text claim itself stays unverified in rule-based mode.
+    photo_claims = [c for c in report.claims if c.kind == "image_context"]
+    assert len(photo_claims) == 1
+    photo_verdict = next(v for v in report.verdicts if v.claim_id == photo_claims[0].id)
+    assert photo_verdict.label == VerdictLabel.OUTDATED
+    assert "2004" in photo_verdict.rationale
+    assert report.overall_label == VerdictLabel.OUTDATED
 
 
 def test_no_input_raises():

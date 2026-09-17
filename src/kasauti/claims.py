@@ -102,7 +102,34 @@ def _fallback(text: str, image_url: Optional[str]) -> ClaimExtraction:
     )
 
 
+IMAGE_CLAIM_TEXT = (
+    "The attached photo is a genuine, current image of the event described in "
+    "the message (not an older or unrelated photo)."
+)
+
+
+def _ensure_image_claim(extraction: ClaimExtraction, image_url: Optional[str]) -> ClaimExtraction:
+    """A forward with a photo always carries one more claim: that the photo
+    shows what the text says it shows. It is judged on Google Lens evidence
+    alone (no text searches), so a true caption on a recycled photo still
+    yields OUTDATED — the single most common WhatsApp lie format."""
+    if image_url and not any(c.kind == "image_context" for c in extraction.claims):
+        extraction.claims.append(Claim(
+            id=f"C{len(extraction.claims) + 1}",
+            text_en=IMAGE_CLAIM_TEXT,
+            kind="image_context",
+            queries=[],
+        ))
+    return extraction
+
+
 def extract_claims(
+    text: str, image_url: Optional[str] = None, llm: Optional[LLM] = None
+) -> ClaimExtraction:
+    return _ensure_image_claim(_extract_claims(text, image_url, llm), image_url)
+
+
+def _extract_claims(
     text: str, image_url: Optional[str] = None, llm: Optional[LLM] = None
 ) -> ClaimExtraction:
     llm = llm or LLM()

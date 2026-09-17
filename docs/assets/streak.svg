@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="26" viewBox="0 0 640 26" role="presentation">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#8a641c" stop-opacity="0"/>
+      <stop offset=".18" stop-color="#8a641c"/>
+      <stop offset=".45" stop-color="#f0c75e"/>
+      <stop offset=".72" stop-color="#c89a35"/>
+      <stop offset=".85" stop-color="#7c5a18"/>
+      <stop offset="1" stop-color="#7c5a18" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="b" x="-10%" y="-100%" width="120%" height="300%"><feGaussianBlur stdDeviation="4"/></filter>
+  </defs>
+  <path d="M10 17 Q 170 3 320 11 T 630 8" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round" filter="url(#b)" opacity=".55"/>
+  <path d="M10 17 Q 170 3 320 11 T 630 8" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round" stroke-dasharray="660" stroke-dashoffset="660">
+    <animate attributeName="stroke-dashoffset" from="660" to="0" dur="1.6s" begin="0.2s" fill="freeze"/>
+  </path>
+</svg>

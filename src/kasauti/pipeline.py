@@ -137,35 +137,41 @@ def check(
         lens_items = lens_evidence(image_analysis, start_index=next_index)
         next_index += len(lens_items)
         all_evidence.extend(lens_items)
-        for claim in searchable:
+        for claim in extraction.claims:
             if claim.kind == "image_context":
                 evidence_by_claim[claim.id] = evidence_by_claim.get(claim.id, []) + lens_items
     _emit(on_event, "evidence",
           f"{len(all_evidence)} distinct sources kept after deduplication.")
 
+    # The photo claim has no text queries: it is judged on Lens evidence alone.
+    judged = searchable + [
+        c for c in extraction.claims
+        if c.kind == "image_context" and not c.queries and image_analysis is not None
+    ]
+
     # 5 — verdicts (one independent LLM call per claim → run them in parallel)
     _emit(on_event, "verdicts", "Judging each claim against the evidence…")
-    verdicts: list = [None] * len(searchable)
-    if len(searchable) <= 1:
-        for i, claim in enumerate(searchable):
+    verdicts: list = [None] * len(judged)
+    if len(judged) <= 1:
+        for i, claim in enumerate(judged):
             verdicts[i] = judge_claim(claim, evidence_by_claim.get(claim.id, []),
                                       llm=llm, image=image_analysis)
     else:
-        with ThreadPoolExecutor(max_workers=min(4, len(searchable))) as pool:
+        with ThreadPoolExecutor(max_workers=min(4, len(judged))) as pool:
             futs = {
                 pool.submit(judge_claim, claim, evidence_by_claim.get(claim.id, []),
                             llm=llm, image=image_analysis): i
-                for i, claim in enumerate(searchable)
+                for i, claim in enumerate(judged)
             }
             for fut in futs:
                 i = futs[fut]
                 try:
                     verdicts[i] = fut.result()
                 except Exception:
-                    verdicts[i] = judge_claim(searchable[i],
-                                              evidence_by_claim.get(searchable[i].id, []),
+                    verdicts[i] = judge_claim(judged[i],
+                                              evidence_by_claim.get(judged[i].id, []),
                                               llm=None, image=image_analysis)
-    for claim, v in zip(searchable, verdicts):
+    for claim, v in zip(judged, verdicts):
         _emit(on_event, "verdicts", f"{claim.id}: {v.label.display} ({v.confidence:.0%})")
 
     label, confidence = overall_verdict(verdicts)

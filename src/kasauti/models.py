@@ -50,6 +50,7 @@ class SourceTier(str, Enum):
     INTERNATIONAL = "international"  # major global outlets
     NATIONAL = "national"            # major Indian outlets
     REGIONAL = "regional"            # smaller/regional outlets
+    REFERENCE = "reference"          # encyclopaedic / archival references
     SATIRE = "satire"                # known satire publications
     UNKNOWN = "unknown"
 

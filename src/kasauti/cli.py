@@ -170,7 +170,9 @@ def _cmd_serve(args: argparse.Namespace) -> int:
     from .server import app
 
     console.print(Panel(
-        f"[bold yellow]कसौटी Kasauti[/] running at [bold]http://127.0.0.1:{args.port}[/]\n"
+        f"[bold yellow]कसौटी Kasauti[/]\n"
+        f"  landing  [bold]http://127.0.0.1:{args.port}/[/]\n"
+        f"  checker  [bold]http://127.0.0.1:{args.port}/app[/]\n"
         "[dim]Paste a forward, get a verdict. Ctrl+C to stop.[/]",
         border_style="yellow",
     ))

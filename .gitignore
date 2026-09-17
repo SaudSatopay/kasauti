@@ -22,3 +22,8 @@ build/
 Thumbs.db
 .idea/
 .vscode/
+
+# Local-only (dev tooling, private submission prep)
+.claude/
+_local/
+

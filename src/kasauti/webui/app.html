@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kasauti — put a forward on the stone</title>
+<meta name="description" content="Kasauti (कसौटी) — paste a WhatsApp forward, get an evidence-first verdict with receipts. Powered by SerpApi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@600;800&family=Anek+Latin:wght@400;500;600;700;800&family=Cinzel:wght@700;900&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500;1,9..144,700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23141114'/><path d='M18 62 Q 50 48 82 56' stroke='%23d4a63f' stroke-width='9' fill='none' stroke-linecap='round'/></svg>">
+</head>
+<body>
+<div class="bg-aurora" aria-hidden="true"></div>
+<canvas id="dust" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav">
+  <a class="brand" href="/" aria-label="Kasauti home">
+    <span class="dev">कसौटी</span><span class="lat">KASAUTI</span>
+  </a>
+  <div class="nav-links">
+    <a href="/#how">How it works</a>
+    <a href="/#engines">SerpApi engines</a>
+    <a href="https://github.com/SaudSatopay/kasauti" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <a class="btn-gold" href="/"><span>← Landing</span></a>
+</nav>
+
+<main class="app">
+  <header class="app-head">
+    <div class="eyebrow">The touchstone · Evidence-first verification</div>
+    <span class="wordmark gold-text">कसौटी</span>
+    <svg class="streak" viewBox="0 0 340 16" aria-hidden="true" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="goldgrad" x1="0" x2="1">
+          <stop offset="0" stop-color="#8a641c"/><stop offset=".35" stop-color="#f0c75e"/>
+          <stop offset=".7" stop-color="#c89a35"/><stop offset="1" stop-color="#7c5a18"/>
+        </linearGradient>
+      </defs>
+      <path d="M4 11 Q 95 2 170 8 T 336 6" fill="none" stroke="url(#goldgrad)" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+    <h1>Place a forward on the stone. <em>Read the mark.</em></h1>
+    <p>Hindi, Hinglish, English — with or without a photo. Live evidence through SerpApi, a verdict with receipts, and a reply you can actually send to the group.</p>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="composer" aria-label="Paste a forward">
+    <div class="bubble">
+      <div class="fwd-tag">↪ Forwarded many times</div>
+      <textarea id="text" rows="5" spellcheck="false"
+        placeholder="Paste the WhatsApp forward here… Hindi, Hinglish, English — sab chalega."></textarea>
+      <div class="attach-row">
+        <input id="image" type="url" placeholder="🖼 optional: paste the image's URL for a Google Lens reverse-image check">
+      </div>
+    </div>
+    <div class="composer-actions">
+      <div class="chips" id="chips" aria-label="Example forwards"></div>
+      <button id="go" class="btn-gold test-btn">
+        <span>Test it on the stone</span>
+        <span class="sub">कसौटी पर कसें</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="log" class="assay-log" hidden aria-live="polite">
+    <div class="log-title"><span class="dot"></span>ASSAY IN PROGRESS</div>
+    <ol id="log-lines"></ol>
+  </section>
+
+  <section id="result" hidden></section>
+</main>
+
+<footer class="site-foot">
+  <div><strong>Kasauti</strong> assists your judgement — it never replaces it. Every verdict links its evidence; read before you rely.</div>
+  <div><a href="https://github.com/SaudSatopay/kasauti" target="_blank" rel="noopener">GitHub</a> · <a href="/">Landing</a></div>
+  <div class="fine">Evidence retrieved live via <a href="https://serpapi.com" rel="noopener" target="_blank">SerpApi</a> — Google Search · Google News · Google Lens. Built for the SerpApi India Hackathon 2026, <em>Knowledge &amp; Public Interest</em> track.</div>
+</footer>
+
+<script src="fx.js?v=2"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>

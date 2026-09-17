@@ -30,6 +30,7 @@ TIER_WEIGHTS: dict[SourceTier, float] = {
     SourceTier.INTERNATIONAL: 0.80,
     SourceTier.NATIONAL: 0.75,
     SourceTier.REGIONAL: 0.55,
+    SourceTier.REFERENCE: 0.60,
     SourceTier.SATIRE: 0.20,
     SourceTier.UNKNOWN: 0.35,
 }
@@ -41,8 +42,18 @@ TIER_LABELS: dict[SourceTier, str] = {
     SourceTier.INTERNATIONAL: "International outlet",
     SourceTier.NATIONAL: "National outlet",
     SourceTier.REGIONAL: "Regional outlet",
+    SourceTier.REFERENCE: "Reference",
     SourceTier.SATIRE: "Satire",
     SourceTier.UNKNOWN: "Unrecognised source",
+}
+
+# Encyclopaedic / archival sources: strong for provenance ("this photo is the
+# 2004 tsunami"), weaker than a newsroom for breaking claims.
+REFERENCE: dict[str, str] = {
+    "wikipedia.org": "Wikipedia",
+    "wikimedia.org": "Wikimedia Commons",
+    "britannica.com": "Britannica",
+    "archive.org": "Internet Archive",
 }
 
 # Dedicated fact-checking desks active on Indian misinformation.
@@ -172,6 +183,7 @@ _REGISTRY: list[tuple[dict[str, str], SourceTier]] = [
     (WIRES, SourceTier.WIRE),
     (INTERNATIONAL, SourceTier.INTERNATIONAL),
     (NATIONAL, SourceTier.NATIONAL),
+    (REFERENCE, SourceTier.REFERENCE),
     (SATIRE, SourceTier.SATIRE),
 ]
 

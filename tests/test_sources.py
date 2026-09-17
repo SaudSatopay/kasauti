@@ -23,6 +23,12 @@ def test_national_outlet():
     assert classify_domain("thehindu.com").tier == SourceTier.NATIONAL
 
 
+def test_reference_tier_for_provenance_sources():
+    cred = classify_domain("en.wikipedia.org")
+    assert cred.tier == SourceTier.REFERENCE
+    assert 0.55 < cred.weight < 0.75  # stronger than unknown, weaker than a newsroom
+
+
 def test_satire_flagged():
     assert classify_domain("fakingnews.com").tier == SourceTier.SATIRE
 

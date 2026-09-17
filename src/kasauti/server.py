@@ -14,7 +14,7 @@ from typing import Any, Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -25,6 +25,16 @@ from .serp import KasautiError, SerpSearcher
 load_dotenv()
 
 app = FastAPI(title="Kasauti", version="0.1.0")
+
+
+@app.middleware("http")
+async def _no_stale_static(request, call_next):
+    """Static UI files revalidate on every load (cheap 304s via ETag), so a
+    browser never keeps a stale stylesheet after an update."""
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+    return response
 
 _WEBUI_DIR = Path(__file__).parent / "webui"
 _EXAMPLES_FILE = Path(__file__).parent / "examples" / "examples.json"
@@ -99,6 +109,12 @@ async def api_check(req: CheckRequest) -> StreamingResponse:
             yield json.dumps(item, ensure_ascii=False) + "\n"
 
     return StreamingResponse(stream(), media_type="application/x-ndjson")
+
+
+@app.get("/app", include_in_schema=False)
+def app_page() -> FileResponse:
+    """The checker. `/` (index.html, served statically) is the landing page."""
+    return FileResponse(_WEBUI_DIR / "app.html", media_type="text/html")
 
 
 app.mount("/", StaticFiles(directory=str(_WEBUI_DIR), html=True), name="webui")

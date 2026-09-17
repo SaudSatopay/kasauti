@@ -135,6 +135,16 @@ NDJSON progress events then the report, so the UI narrates the agent's work
 live), `mcp_server.py` (FastMCP `verify_forward` tool over stdio), and the
 Python API.
 
+The web UI is two static pages with no build step: `/` is the landing page
+(`webui/index.html` — the hero, the hoax ticker, the pipeline walkthrough,
+the credibility ladder and the SerpApi engines section) and `/app` is the
+checker (`webui/app.html`). The checker accepts deep links —
+`/app?text=…&image=…&auto=1` — which the landing page's "run this exact
+check" buttons use, and which make reproducible screenshots trivial. Static
+files are served with `Cache-Control: no-cache` so a browser always
+revalidates (cheap ETag 304s) and never shows a stale stylesheet after an
+update.
+
 ## Testing philosophy
 
 51 tests, all offline, all key-free: heuristics per language, tiering, every

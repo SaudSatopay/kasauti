@@ -11,6 +11,7 @@ Two paths:
 from __future__ import annotations
 
 import re
+from datetime import datetime, timezone
 from typing import Optional
 
 from .llm import LLM
@@ -81,7 +82,7 @@ def _apply_guardrails(
 
     strong_tiers = {
         SourceTier.FACT_CHECKER, SourceTier.OFFICIAL, SourceTier.WIRE,
-        SourceTier.INTERNATIONAL, SourceTier.NATIONAL,
+        SourceTier.INTERNATIONAL, SourceTier.NATIONAL, SourceTier.REFERENCE,
     }
 
     if not cited:
@@ -119,9 +120,43 @@ def _apply_guardrails(
     return verdict
 
 
-def _rule_based(claim: Claim, evidence: list[EvidenceItem]) -> ClaimVerdict:
+def _rule_based_image(claim: Claim, evidence: list[EvidenceItem],
+                      image: ImageAnalysis) -> ClaimVerdict:
+    """The photo claim without an LLM: a dated provenance years before today
+    is the tell for a recycled image."""
+    cited = [e.id for e in evidence[:3]]
+    year = image.earliest_date.year if image.earliest_date else image.title_year_hint
+    if year and datetime.now(timezone.utc).year - year >= 1:
+        when = (f"the earliest dated appearance is {image.earliest_date.date().isoformat()}"
+                if image.earliest_date else f"match titles repeatedly reference {year}")
+        return ClaimVerdict(
+            claim_id=claim.id, label=VerdictLabel.OUTDATED, confidence=0.65,
+            rationale=(f"Google Lens finds this image on {len(image.matches)} other pages; "
+                       f"{when} — years before the event the message describes. A real "
+                       f"photo, recycled as current."),
+            citation_ids=cited,
+        )
+    if not image.matches:
+        return ClaimVerdict(
+            claim_id=claim.id, label=VerdictLabel.UNVERIFIED, confidence=0.3,
+            rationale="Google Lens found no other appearances of this image, so its "
+                      "provenance can't be confirmed either way.",
+        )
+    return ClaimVerdict(
+        claim_id=claim.id, label=VerdictLabel.UNVERIFIED, confidence=0.35,
+        rationale=(f"The image appears on {len(image.matches)} other pages but none carried "
+                   f"a date signal; open the matches to judge its real context."),
+        citation_ids=cited,
+    )
+
+
+def _rule_based(claim: Claim, evidence: list[EvidenceItem],
+                image: Optional[ImageAnalysis] = None) -> ClaimVerdict:
     """No-LLM path: deliberately conservative."""
     from .evidence import relevance
+
+    if claim.kind == "image_context" and image is not None:
+        return _rule_based_image(claim, evidence, image)
 
     # A debunk headline only counts if it plausibly concerns THIS claim —
     # a fact-checker debunking something unrelated is not evidence here.
@@ -191,7 +226,7 @@ def judge_claim(
 ) -> ClaimVerdict:
     llm = llm or LLM()
     if not llm.available:
-        return _apply_guardrails(_rule_based(claim, evidence), evidence, image)
+        return _apply_guardrails(_rule_based(claim, evidence, image), evidence, image)
 
     user = f'CLAIM {claim.id}: "{claim.text_en}"\n(kind: {claim.kind})\n\nEVIDENCE TABLE:\n'
     user += _evidence_table(evidence)
@@ -202,7 +237,7 @@ def judge_claim(
 
     data = llm.chat_json(_JUDGE_SYSTEM, user)
     if not data:
-        return _apply_guardrails(_rule_based(claim, evidence), evidence, image)
+        return _apply_guardrails(_rule_based(claim, evidence, image), evidence, image)
 
     label_raw = str(data.get("label") or "unverified").strip().lower()
     label = VerdictLabel(label_raw) if label_raw in _VALID_LABELS else VerdictLabel.UNVERIFIED
