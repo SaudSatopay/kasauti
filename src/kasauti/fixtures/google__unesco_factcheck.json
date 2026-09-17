@@ -1,0 +1,36 @@
+{
+  "_engine": "google",
+  "_match": ["unesco", "anthem", "altnews", "boomlive", "factly", "vishvasnews"],
+  "data": {
+    "search_metadata": { "status": "Success (bundled fixture)" },
+    "organic_results": [
+      {
+        "position": 1,
+        "title": "No, UNESCO has not declared 'Jana Gana Mana' the best national anthem",
+        "link": "https://www.altnews.in/unesco-has-not-declared-jana-gana-mana-best-national-anthem/",
+        "displayed_link": "https://www.altnews.in",
+        "snippet": "UNESCO gives no award for national anthems. The viral message is a hoax that has circulated since at least 2008.",
+        "date": "Aug 14, 2024",
+        "source": "Alt News"
+      },
+      {
+        "position": 2,
+        "title": "Fact Check: क्या UNESCO ने 'जन गण मन' को सर्वश्रेष्ठ राष्ट्रगान घोषित किया? नहीं, दावा फर्जी है",
+        "link": "https://www.vishvasnews.com/viral/fact-check-unesco-jana-gana-mana-best-anthem-fake-claim/",
+        "displayed_link": "https://www.vishvasnews.com",
+        "snippet": "विश्वास न्यूज़ की पड़ताल में यह दावा फर्जी निकला। UNESCO ऐसा कोई पुरस्कार नहीं देता।",
+        "date": "Jan 25, 2024",
+        "source": "Vishvas News"
+      },
+      {
+        "position": 3,
+        "title": "UNESCO best national anthem hoax: a recycled forward, debunked again",
+        "link": "https://factly.in/unesco-best-national-anthem-jana-gana-mana-recycled-hoax/",
+        "displayed_link": "https://factly.in",
+        "snippet": "Factly review: UNESCO confirmed to fact-checkers that it has never instituted a 'best anthem' award.",
+        "date": "Aug 16, 2023",
+        "source": "Factly"
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kasauti — the touchstone for forwards</title>
+<meta name="description" content="Kasauti (कसौटी) — evidence-first misinformation checking for India, powered by SerpApi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@600;800&family=Anek+Latin:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23141114'/><path d='M18 62 Q 50 48 82 56' stroke='%23d4a63f' stroke-width='9' fill='none' stroke-linecap='round'/></svg>">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="wordmark">
+    <span class="devanagari">कसौटी</span>
+    <span class="latin">KASAUTI</span>
+  </div>
+  <svg class="streak" viewBox="0 0 320 14" aria-hidden="true" preserveAspectRatio="none">
+    <path d="M4 10 Q 90 2 160 7 T 316 5" fill="none" stroke="url(#goldgrad)" stroke-width="5" stroke-linecap="round"/>
+    <defs>
+      <linearGradient id="goldgrad" x1="0" x2="1">
+        <stop offset="0" stop-color="#8a641c"/>
+        <stop offset="0.35" stop-color="#f0c75e"/>
+        <stop offset="0.7" stop-color="#c89a35"/>
+        <stop offset="1" stop-color="#7c5a18"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  <p class="tagline">Gold is tested on a touchstone. So are forwards.<br>
+    <em>Check karo, phir forward karo.</em></p>
+</header>
+
+<main>
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="composer" aria-label="Paste a forward">
+    <div class="bubble">
+      <div class="fwd-tag">↪ Forwarded many times</div>
+      <textarea id="text" rows="5" spellcheck="false"
+        placeholder="Paste the WhatsApp forward here… Hindi, Hinglish, English — sab chalega."></textarea>
+      <div class="attach-row">
+        <input id="image" type="url" placeholder="🖼 optional: paste the image's URL for a reverse-image check">
+      </div>
+    </div>
+    <div class="composer-actions">
+      <div class="chips" id="chips" aria-label="Example forwards"></div>
+      <button id="go" class="test-btn">
+        <span class="btn-label">Test it on the stone</span>
+        <span class="btn-sub">कसौटी पर कसें</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="log" class="assay-log" hidden aria-live="polite">
+    <div class="log-title">ASSAY IN PROGRESS</div>
+    <ol id="log-lines"></ol>
+  </section>
+
+  <section id="result" hidden></section>
+</main>
+
+<footer class="colophon">
+  <p><strong>Kasauti</strong> assists your judgement — it never replaces it.
+     Every verdict links its evidence; read before you rely.</p>
+  <p class="fine">Evidence retrieved live via <a href="https://serpapi.com" rel="noopener" target="_blank">SerpApi</a>
+     — Google Search · Google News · Google Lens. Built for the SerpApi India Hackathon 2026,
+     <em>Knowledge&nbsp;&amp;&nbsp;Public&nbsp;Interest</em> track.</p>
+</footer>
+
+<template id="tpl-report"></template>
+<script src="app.js"></script>
+</body>
+</html>

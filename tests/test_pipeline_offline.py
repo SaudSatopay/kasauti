@@ -1,0 +1,82 @@
+"""End-to-end pipeline tests: offline fixtures, no LLM, zero network."""
+from kasauti import check
+from kasauti.models import SourceTier, VerdictLabel
+from kasauti.serp import SerpSearcher
+
+UNESCO = (
+    "Good news!! 🇮🇳 UNESCO has declared our JANA GANA MANA the BEST NATIONAL "
+    "ANTHEM in the world!! Forward this to every Indian!!"
+)
+
+FLOOD_IMAGE = (
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/"
+    "Chennai_Floods%2C_2015.jpg/960px-Chennai_Floods%2C_2015.jpg"
+)
+
+
+def test_unesco_hoax_end_to_end():
+    events: list[tuple[str, str]] = []
+    report = check(UNESCO, on_event=lambda s, d: events.append((s, d)))
+
+    # Fingerprint caught the chain-forward markers.
+    assert report.fingerprint.score >= 25
+
+    # Fixtures produced evidence, with fact-checkers ranked on top.
+    assert report.evidence, "expected evidence from bundled fixtures"
+    assert report.evidence[0].credibility.tier == SourceTier.FACT_CHECKER
+
+    # Rule-based mode reads debunk headlines from fact-check desks → false.
+    assert report.overall_label == VerdictLabel.FALSE
+
+    # A reply was drafted even without an LLM.
+    assert report.suggested_reply
+    assert "http" in report.suggested_reply
+
+    # Budget accounting: 1 claim × 3 strategies.
+    assert report.searches_used == 3
+    assert report.offline is True
+    assert report.llm_used is False
+
+    # Progress events cover the pipeline stages in order.
+    stages = [s for s, _ in events]
+    for stage in ("fingerprint", "claims", "search", "evidence", "verdicts", "done"):
+        assert stage in stages
+
+
+def test_image_check_builds_timeline():
+    report = check(
+        "Shocking visuals from yesterday's Mumbai floods! Share before deleted!",
+        image_url=FLOOD_IMAGE,
+    )
+    assert report.image is not None
+    assert report.image.matches, "lens fixture should produce matches"
+    assert report.image.earliest_date is not None
+    assert report.image.earliest_date.year == 2015
+    assert "2015" in (report.image.note or "")
+    # Lens matches become citable evidence items.
+    assert any(e.channel == "lens" for e in report.evidence)
+    # 3 text searches + 1 lens search.
+    assert report.searches_used == 4
+
+
+def test_no_input_raises():
+    import pytest
+
+    with pytest.raises(ValueError):
+        check("")
+
+
+def test_missing_key_message_is_helpful(monkeypatch):
+    monkeypatch.delenv("KASAUTI_OFFLINE", raising=False)
+    from kasauti.serp import KasautiError
+
+    import pytest
+
+    with pytest.raises(KasautiError, match="SERPAPI_API_KEY"):
+        SerpSearcher(offline=False)
+
+
+def test_report_is_json_serialisable():
+    report = check(UNESCO)
+    payload = report.model_dump_json()
+    assert "overall_label" in payload

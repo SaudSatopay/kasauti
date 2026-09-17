@@ -1,0 +1,27 @@
+{
+  "_engine": "google",
+  "_match": ["free", "recharge", "modi", "719", "altnews", "boomlive", "pib"],
+  "data": {
+    "search_metadata": { "status": "Success (bundled fixture)" },
+    "organic_results": [
+      {
+        "position": 1,
+        "title": "PIB Fact Check: Government is NOT giving free ₹719 recharge to users",
+        "link": "https://pib.gov.in/PressReleasePage.aspx?PRID=factcheck-free-recharge",
+        "displayed_link": "https://pib.gov.in",
+        "snippet": "A message circulating on WhatsApp claims the Government of India is offering free mobile recharge to all users. This claim is fake. It is a phishing link designed to harvest personal data.",
+        "date": "Jul 2, 2025",
+        "source": "PIB"
+      },
+      {
+        "position": 2,
+        "title": "Free recharge in PM scheme? Viral WhatsApp message is a phishing scam",
+        "link": "https://www.boomlive.in/fact-check/free-recharge-pm-scheme-whatsapp-phishing-scam",
+        "displayed_link": "https://www.boomlive.in",
+        "snippet": "BOOM found the link leads to a fraudulent site that spreads itself through WhatsApp groups. No such government scheme exists.",
+        "date": "Jun 28, 2025",
+        "source": "BOOM"
+      }
+    ]
+  }
+}

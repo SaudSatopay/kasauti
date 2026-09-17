@@ -1,0 +1,25 @@
+{
+  "_engine": "google_news",
+  "_match": ["unesco", "anthem"],
+  "data": {
+    "search_metadata": { "status": "Success (bundled fixture)" },
+    "news_results": [
+      {
+        "position": 1,
+        "title": "Old 'UNESCO best anthem' hoax resurfaces ahead of Independence Day",
+        "source": { "name": "The Indian Express", "icon": "https://lh3.googleusercontent.com/x" },
+        "link": "https://indianexpress.com/article/india/unesco-best-anthem-hoax-resurfaces/",
+        "date": "08/14/2025, 07:00 AM, +0000 UTC",
+        "snippet": "The decade-old WhatsApp forward claiming UNESCO honoured the Indian national anthem is circulating again."
+      },
+      {
+        "position": 2,
+        "title": "Five WhatsApp hoaxes that return every August",
+        "source": { "name": "India Today", "icon": "https://lh3.googleusercontent.com/y" },
+        "link": "https://www.indiatoday.in/fact-check/story/whatsapp-hoaxes-august-unesco-anthem",
+        "date": "08/13/2025, 09:30 AM, +0000 UTC",
+        "snippet": "From the UNESCO anthem award to free recharge offers, these forwards refuse to die."
+      }
+    ]
+  }
+}

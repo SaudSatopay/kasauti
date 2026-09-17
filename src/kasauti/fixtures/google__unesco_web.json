@@ -1,0 +1,53 @@
+{
+  "_engine": "google",
+  "_match": ["unesco", "national", "anthem", "best"],
+  "data": {
+    "search_metadata": { "status": "Success (bundled fixture)" },
+    "organic_results": [
+      {
+        "position": 1,
+        "title": "No, UNESCO has not declared 'Jana Gana Mana' the best national anthem",
+        "link": "https://www.altnews.in/unesco-has-not-declared-jana-gana-mana-best-national-anthem/",
+        "displayed_link": "https://www.altnews.in",
+        "snippet": "A viral WhatsApp message claims UNESCO declared the Indian national anthem the best in the world. UNESCO gives no such award; the claim has circulated since 2008 and has been repeatedly debunked.",
+        "date": "Aug 14, 2024",
+        "source": "Alt News"
+      },
+      {
+        "position": 2,
+        "title": "Fact check: UNESCO 'best national anthem' message is a recycled hoax",
+        "link": "https://www.boomlive.in/fact-check/unesco-best-national-anthem-jana-gana-mana-hoax",
+        "displayed_link": "https://www.boomlive.in",
+        "snippet": "BOOM found that UNESCO has never ranked national anthems. The organisation itself denied instituting any such award when the hoax first went viral.",
+        "date": "Jan 26, 2023",
+        "source": "BOOM"
+      },
+      {
+        "position": 3,
+        "title": "UNESCO | Building peace in the minds of men and women",
+        "link": "https://www.unesco.org/en",
+        "displayed_link": "https://www.unesco.org",
+        "snippet": "UNESCO is the United Nations Educational, Scientific and Cultural Organization. It does not confer awards on national anthems.",
+        "source": "UNESCO"
+      },
+      {
+        "position": 4,
+        "title": "The 'best national anthem' forward is back — here's why it refuses to die",
+        "link": "https://www.thequint.com/news/webqoof/unesco-national-anthem-viral-message-fact-check",
+        "displayed_link": "https://www.thequint.com",
+        "snippet": "The WebQoof team traces the UNESCO anthem hoax through a decade of WhatsApp virality.",
+        "date": "Aug 15, 2022",
+        "source": "The Quint"
+      },
+      {
+        "position": 5,
+        "title": "Proud moment for every Indian — UNESCO declares our anthem BEST!",
+        "link": "https://proudindian-updates.blogspot.com/2016/08/unesco-anthem.html",
+        "displayed_link": "https://proudindian-updates.blogspot.com",
+        "snippet": "Share this great news with every Indian! Jana Gana Mana declared best anthem in the world by UNESCO.",
+        "date": "Aug 15, 2016",
+        "source": "proudindian-updates"
+      }
+    ]
+  }
+}
