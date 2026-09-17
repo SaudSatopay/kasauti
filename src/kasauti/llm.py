@@ -15,9 +15,13 @@ If nothing is configured, Kasauti degrades gracefully to rule-based mode.
 from __future__ import annotations
 
 import json
+import hashlib
+import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Optional
 
 
@@ -122,12 +126,26 @@ def _extract_json(raw: str) -> Optional[dict[str, Any]]:
     return None
 
 
+def _llm_cache_ttl_seconds() -> int:
+    try:
+        hours = float(os.getenv("KASAUTI_LLM_CACHE_TTL_HOURS", "48"))
+    except ValueError:
+        hours = 48.0
+    return int(hours * 3600)
+
+
 class LLM:
-    """Minimal chat-JSON client over the `openai` SDK."""
+    """Minimal chat-JSON client over the `openai` SDK.
+
+    Successful responses are cached on disk (keyed on model + prompt + params).
+    This keeps a warm demo instant and, crucially on free tiers, avoids
+    re-spending the per-minute request quota when the same forward is re-checked.
+    """
 
     def __init__(self, config: Optional[LLMConfig] = None):
         self.config = config or resolve_config()
         self._client = None
+        self._cache_dir = Path(os.getenv("KASAUTI_CACHE_DIR", ".kasauti_cache")) / "llm"
         if self.config is not None:
             try:
                 from openai import OpenAI  # lazy import
@@ -150,31 +168,69 @@ class LLM:
     def provider(self) -> Optional[str]:
         return f"{self.config.provider} · {self.config.model}" if self.config else None
 
+    def _cache_key(self, system: str, user: str, temperature: float, max_tokens: int) -> Path:
+        payload = json.dumps(
+            {
+                "m": self.config.model if self.config else "",
+                "s": system, "u": user, "t": temperature, "n": max_tokens,
+                "x": self.config.extra_params if self.config else {},
+            },
+            sort_keys=True, ensure_ascii=False,
+        )
+        digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()[:24]
+        return self._cache_dir / f"{digest}.json"
+
+    def _cache_get(self, path: Path) -> Optional[dict[str, Any]]:
+        ttl = _llm_cache_ttl_seconds()
+        if ttl <= 0 or not path.exists():
+            return None
+        try:
+            blob = json.loads(path.read_text(encoding="utf-8"))
+            if time.time() - float(blob.get("ts", 0)) > ttl:
+                return None
+            return blob.get("data")
+        except (json.JSONDecodeError, OSError, ValueError):
+            return None
+
+    def _cache_put(self, path: Path, data: dict[str, Any]) -> None:
+        if _llm_cache_ttl_seconds() <= 0:
+            return
+        try:
+            self._cache_dir.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"ts": time.time(), "data": data}, ensure_ascii=False),
+                            encoding="utf-8")
+        except OSError:
+            pass
+
     def chat_json(
         self, system: str, user: str, *, temperature: float = 0.2, max_tokens: int = 1200
     ) -> Optional[dict[str, Any]]:
-        """One JSON-returning chat call; one retry with a stern reminder."""
+        """One JSON-returning chat call; one retry with a stern reminder.
+
+        Cached on disk: a repeated identical call returns instantly and spends
+        no request quota (important on rate-limited free tiers)."""
         if not self._client or not self.config:
             return None
+
+        cache_path = self._cache_key(system, user, temperature, max_tokens)
+        cached = self._cache_get(cache_path)
+        if cached is not None:
+            return cached
+
         messages = [
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ]
-        extra = self.config.extra_params or {}
+        # extra_params (e.g. reasoning_effort) help some models but are rejected
+        # by others with a 400; _use_extra flips off and retries if that happens.
+        self._use_extra = bool(self.config.extra_params)
         for attempt in range(2):
-            try:
-                resp = self._client.chat.completions.create(
-                    model=self.config.model,
-                    messages=messages,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    extra_body=extra or None,
-                )
-                raw = (resp.choices[0].message.content or "").strip()
-            except Exception:
+            raw = self._create(messages, temperature, max_tokens)
+            if raw is None:
                 return None
             data = _extract_json(raw)
             if data is not None:
+                self._cache_put(cache_path, data)
                 return data
             messages.append({"role": "assistant", "content": raw[:2000]})
             messages.append({
@@ -182,3 +238,31 @@ class LLM:
                 "content": "Reply again with ONLY a valid JSON object. No prose, no markdown.",
             })
         return None
+
+    def _create(self, messages: list, temperature: float, max_tokens: int) -> Optional[str]:
+        """One completion call. On a 400 that looks like a rejected extra param,
+        retry once without extra_body; on any other error, give up (→ fallback)."""
+        extra = self.config.extra_params if getattr(self, "_use_extra", False) else None
+        try:
+            resp = self._client.chat.completions.create(
+                model=self.config.model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                extra_body=extra or None,
+            )
+            return (resp.choices[0].message.content or "").strip()
+        except Exception as exc:  # noqa: BLE001
+            if extra and "400" in str(exc):
+                self._use_extra = False  # this model dislikes the extra param
+                try:
+                    resp = self._client.chat.completions.create(
+                        model=self.config.model,
+                        messages=messages,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                    )
+                    return (resp.choices[0].message.content or "").strip()
+                except Exception:
+                    return None
+            return None
