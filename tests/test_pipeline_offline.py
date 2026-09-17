@@ -8,9 +8,10 @@ UNESCO = (
     "ANTHEM in the world!! Forward this to every Indian!!"
 )
 
-FLOOD_IMAGE = (
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/"
-    "Chennai_Floods%2C_2015.jpg/960px-Chennai_Floods%2C_2015.jpg"
+TSUNAMI_IMAGE = (
+    "https://upload.wikimedia.org/wikipedia/commons/8/80/"
+    "US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_"
+    "ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg"
 )
 
 
@@ -43,16 +44,19 @@ def test_unesco_hoax_end_to_end():
         assert stage in stages
 
 
-def test_image_check_builds_timeline():
+def test_image_check_detects_recycled_photo():
     report = check(
-        "Shocking visuals from yesterday's Mumbai floods! Share before deleted!",
-        image_url=FLOOD_IMAGE,
+        "CYCLONE ALERT! Massive destruction on the Tamil Nadu coast right now! "
+        "Share before it gets deleted!",
+        image_url=TSUNAMI_IMAGE,
     )
     assert report.image is not None
     assert report.image.matches, "lens fixture should produce matches"
-    assert report.image.earliest_date is not None
-    assert report.image.earliest_date.year == 2015
-    assert "2015" in (report.image.note or "")
+    # Lens matches carry no machine-readable dates for this image, but the
+    # match titles keep saying 2004 — the title-year heuristic catches it.
+    assert report.image.earliest_date is None
+    assert report.image.title_year_hint == 2004
+    assert "2004" in (report.image.note or "")
     # Lens matches become citable evidence items.
     assert any(e.channel == "lens" for e in report.evidence)
     # 3 text searches + 1 lens search.

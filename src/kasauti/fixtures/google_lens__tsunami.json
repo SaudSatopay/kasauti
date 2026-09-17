@@ -1,0 +1,37 @@
+{
+  "_engine": "google_lens",
+  "_match": ["navy", "sumatra", "tsunami", "village"],
+  "data": {
+    "search_metadata": { "status": "Success (bundled fixture)" },
+    "visual_matches": [
+      {
+        "position": 1,
+        "title": "2004 Indian Ocean earthquake and tsunami - Wikipedia",
+        "link": "https://en.wikipedia.org/wiki/2004_Indian_Ocean_earthquake_and_tsunami",
+        "source": "Wikipedia",
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg/320px-thumbnail.jpg"
+      },
+      {
+        "position": 2,
+        "title": "World's 10 deadliest earthquakes in the past 100 years",
+        "link": "https://www.wionews.com/photos/worlds-10-deadliest-earthquakes",
+        "source": "WION",
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg/240px-thumbnail.jpg"
+      },
+      {
+        "position": 3,
+        "title": "Remembering the 2004 tsunami: the disaster that killed 230,000 people",
+        "link": "https://www.indiatodayne.in/photos/2004-tsunami-remembrance",
+        "source": "India Today NE",
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg/240px-thumbnail.jpg"
+      },
+      {
+        "position": 4,
+        "title": "Thailand and India honor the victims of the 2004 tsunami, 20 years on",
+        "link": "https://www.youtube.com/watch?v=tsunami2004memorial",
+        "source": "YouTube",
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/US_Navy_050102-N-9593M-040_A_village_near_the_coast_of_Sumatra_lays_in_ruin_after_the_Tsunami_that_struck_South_East_Asia.jpg/200px-thumbnail.jpg"
+      }
+    ]
+  }
+}

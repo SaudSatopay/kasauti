@@ -121,10 +121,15 @@ def _apply_guardrails(
 
 def _rule_based(claim: Claim, evidence: list[EvidenceItem]) -> ClaimVerdict:
     """No-LLM path: deliberately conservative."""
+    from .evidence import relevance
+
+    # A debunk headline only counts if it plausibly concerns THIS claim —
+    # a fact-checker debunking something unrelated is not evidence here.
     fc_debunks = [
         e for e in evidence
         if e.credibility.tier == SourceTier.FACT_CHECKER
         and _DEBUNK_WORDS.search(f"{e.title} {e.snippet or ''}")
+        and relevance(claim.text_en, e.title, e.snippet) >= 0.15
     ]
     if fc_debunks:
         top = sorted(fc_debunks, key=lambda e: e.score, reverse=True)[:3]

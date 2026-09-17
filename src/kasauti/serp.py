@@ -219,11 +219,16 @@ class SerpSearcher:
         })
 
     def lens(self, image_url: str) -> dict[str, Any]:
-        """Strategy 4 — Google Lens reverse image search."""
+        """Strategy 4 — Google Lens reverse image search.
+
+        type=visual_matches is required: with the newer Lens experience,
+        type=all serves the AI-overview page and omits the visual_matches
+        array entirely (verified live, Sept 2026).
+        """
         return self._run({
             "engine": "google_lens",
             "url": image_url,
-            "type": "all",
+            "type": "visual_matches",
             "hl": "en",
             "country": "in",
         })

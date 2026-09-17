@@ -172,6 +172,16 @@ def _canonical_link(link: str) -> str:
     return link.rstrip("/")
 
 
+_LISTING_URL_RE = re.compile(r"/(category|categories|tag|tags|author|topic|topics)/|/page/\d+", re.I)
+_LISTING_TITLE_RE = re.compile(r"\barchives?\b.*\bpage\b|\bpage \d+ of \d+\b", re.I)
+
+
+def _looks_like_listing(link: str, title: str) -> bool:
+    """Category/tag/archive index pages aren't evidence about any one claim,
+    but they rank well on fact-check domains and would hijack the tier bonus."""
+    return bool(_LISTING_URL_RE.search(link)) or bool(_LISTING_TITLE_RE.search(title or ""))
+
+
 def build_evidence(
     claim: Claim,
     raw_batches: Iterable[list[dict[str, Any]]],
@@ -186,6 +196,8 @@ def build_evidence(
         for item in batch:
             canon = _canonical_link(item["link"])
             if canon in seen_links:
+                continue
+            if _looks_like_listing(item["link"], item.get("title", "")):
                 continue
             seen_links.add(canon)
             merged.append(item)

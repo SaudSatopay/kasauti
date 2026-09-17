@@ -47,17 +47,18 @@ vibes, no bookmarks bar.
 > Hinglish out — receipts attached, no lecturing. One tap, paste it back in
 > the group, uncle ki izzat intact."
 
-### 1:35–2:15 — Demo 2: the recycled flood photo (Google Lens)
+### 1:35–2:15 — Demo 2: the recycled disaster photo (Google Lens)
 
-*Click the **Old photo as new flood** chip (text + image URL) → run.*
+*Click the **Old photo as new cyclone** chip (text + image URL) → run.*
 
 > "The biggest lie format in India isn't fake photos — it's *real* photos
-> with fake captions. 'Yesterday's Mumbai floods.' Kasauti sends the image to
-> **Google Lens through SerpApi** and builds an earliest-appearance timeline…
-> There it is: this photo has lived on Wikipedia since **December 2015**.
-> It's the Chennai floods, ten years ago. Verdict: OUTDATED."
+> with fake captions. 'Cyclone hitting the Tamil Nadu coast RIGHT NOW.'
+> Kasauti sends the image to **Google Lens through SerpApi** and maps where
+> else it lives… and look at the match titles: Wikipedia, WION, India Today —
+> all about the **2004 Indian Ocean tsunami**. This 'breaking news' photo is
+> twenty-two years old."
 
-*Point at the timeline strip with the dated matches.*
+*Point at the image-match strip and the "titles reference 2004" note.*
 
 ### 2:15–2:40 — Beyond the app (CLI + MCP, for the engineers)
 

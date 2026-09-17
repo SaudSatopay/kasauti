@@ -123,6 +123,7 @@ class ImageAnalysis(BaseModel):
     distinct_domains: int = 0
     earliest_date: Optional[datetime] = None
     earliest_domain: Optional[str] = None
+    title_year_hint: Optional[int] = None  # year the match titles keep citing
     note: Optional[str] = None
 
 

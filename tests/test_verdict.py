@@ -14,7 +14,7 @@ def _ev(eid: str, tier: SourceTier, title: str = "title", snippet: str = "") -> 
 
 
 def _claim() -> Claim:
-    return Claim(id="C1", text_en="test claim", queries=["q"])
+    return Claim(id="C1", text_en="UNESCO declared the Indian anthem the best", queries=["q"])
 
 
 def test_guardrail_no_citations_downgrades_to_unverified():
@@ -76,6 +76,19 @@ def test_rule_based_no_evidence_is_unverified():
     out = _rule_based(_claim(), [])
     assert out.label == VerdictLabel.UNVERIFIED
     assert out.confidence <= 0.3
+
+
+def test_rule_based_ignores_unrelated_debunks():
+    # A fact-checker debunking something else entirely must not flip THIS claim.
+    ev = [
+        _ev("E1", SourceTier.FACT_CHECKER,
+            title="Fact check: old video of Mexico airport shared as Mumbai rains",
+            snippet="the viral video is false"),
+        _ev("E2", SourceTier.FACT_CHECKER,
+            title="No, this hoax about free laptops is fake"),
+    ]
+    out = _rule_based(_claim(), ev)
+    assert out.label == VerdictLabel.UNVERIFIED
 
 
 def test_overall_verdict_worst_wins():

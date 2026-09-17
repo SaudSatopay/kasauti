@@ -56,9 +56,10 @@ _RULES: list[tuple[str, str, int, list[str], str]] = [
         "'Will be deleted' / 'media is hiding it'",
         18,
         [
-            r"before (it('| i)?s|this is) (deleted|removed|taken down)",
+            r"before (it('| i)?s|this is|it gets) (deleted|removed|taken down)",
             r"delete (kar|ho) (diya|jayega|jaayega)",
             r"\bmedia (won'?t|will not|is not|doesn'?t) (show|cover|tell)\b",
+            r"\bmedia is hiding\b",
             r"\bnews channels? (won'?t|hiding|will never)\b",
             r"मीडिया (नहीं दिखाएगा|छुपा रही)",
             r"\bwhatsapp (will be|is getting) (closed|banned)\b",

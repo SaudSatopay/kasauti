@@ -10,7 +10,7 @@ across live evidence from the entire web, and read the mark.*
 
 `Check karo, phir forward karo.` · *Verify before you amplify.*
 
-[![tests](https://img.shields.io/badge/tests-51%20passing-2e7d4f)](#-tests)
+[![tests](https://img.shields.io/badge/tests-56%20passing-2e7d4f)](#-tests)
 [![python](https://img.shields.io/badge/python-3.10%2B-d4a63f)](#-quickstart)
 [![powered by SerpApi](https://img.shields.io/badge/evidence%20by-SerpApi-1a73e8)](https://serpapi.com)
 [![license](https://img.shields.io/badge/license-MIT-6b6560)](LICENSE)
@@ -53,9 +53,9 @@ with links — and a polite, ready-to-paste reply for the group.
 And the feature that catches the biggest lie category of all:
 
 > 🖼️ **Old-photo detection.** Attach an image URL and Kasauti runs it through
-> **Google Lens via SerpApi**, builds an *earliest-known-appearance timeline*,
-> and tells you the "shocking visuals from yesterday's floods" were actually
-> photographed in 2015.
+> **Google Lens via SerpApi**, maps the image's other lives across the web
+> (dated appearances *and* the years its match titles keep citing), and tells
+> you the "cyclone hitting the coast RIGHT NOW" is actually the 2004 tsunami.
 
 ## 🚀 Quickstart
 
@@ -197,7 +197,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-51 tests cover the fingerprint heuristics (English + Hinglish + Devanagari),
+56 tests cover the fingerprint heuristics (English + Hinglish + Devanagari),
 source tiering, date parsing for every format SerpApi emits, dedup and
 ranking, verdict guardrails, both fallback paths, the streaming API, and two
 end-to-end pipeline runs — all against bundled SerpApi-shaped fixtures:

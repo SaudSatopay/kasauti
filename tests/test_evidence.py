@@ -100,6 +100,31 @@ def test_normalize_news_flattens_nested_stories():
     assert flat[0]["source_name"] == "The Indian Express"
 
 
+def test_listing_pages_filtered_out():
+    raw = {
+        "organic_results": [
+            {   # category archive on a fact-check domain — junk, must be dropped
+                "title": "English Archives - Page 662 of 664",
+                "link": "https://factly.in/category/english/page/662/",
+                "snippet": "UNESCO anthem and other fact checks",
+            },
+            {
+                "title": "UNESCO anthem claim: our fact check",
+                "link": "https://factly.in/unesco-anthem-claim-fact-check/",
+                "snippet": "UNESCO declared anthem best claim reviewed",
+            },
+            {
+                "title": "Anthem coverage",
+                "link": "https://example.com/tag/anthem/",
+                "snippet": "all anthem stories",
+            },
+        ]
+    }
+    items = build_evidence(_claim(), [normalize_web(raw)])
+    links = [e.link for e in items]
+    assert links == ["https://factly.in/unesco-anthem-claim-fact-check/"]
+
+
 def test_evidence_ids_offset():
     raw = {"organic_results": [{"title": "UNESCO anthem claim checked",
                                 "link": "https://factly.in/x", "snippet": "anthem"}]}

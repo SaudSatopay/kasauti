@@ -60,8 +60,21 @@ def _top_links(report: Report, limit: int = 2) -> list[str]:
     return [e.link for e in ranked[:limit]]
 
 
+_UNVERIFIED_NO_LINKS = {
+    "en": ("🙏 I tried verifying this and couldn't find any reliable source "
+           "reporting it yet. Maybe let's wait before forwarding."),
+    "hi": ("🙏 Maine check kiya, abhi tak kisi bharosemand source ne yeh khabar "
+           "report nahi ki hai. Thoda ruk kar confirm kar lete hain."),
+}
+
+
 def _fallback_reply(report: Report, lang: str) -> str:
-    table = _FALLBACK_HI if lang.startswith("hi") else _FALLBACK_EN
+    hindi = lang.startswith("hi")
+    # For an unverified forward there is no debunk to link; attaching the
+    # top-ranked-but-uncommitted results would only lend it false authority.
+    if report.overall_label == VerdictLabel.UNVERIFIED:
+        return _UNVERIFIED_NO_LINKS["hi" if hindi else "en"]
+    table = _FALLBACK_HI if hindi else _FALLBACK_EN
     template = table.get(report.overall_label, table[VerdictLabel.UNVERIFIED])
     links = " ".join(_top_links(report)) or "(no reliable links found)"
     return template.format(links=links)

@@ -8,11 +8,26 @@ where else the image appears; any dated appearances let us build an
 """
 from __future__ import annotations
 
+import re
+from collections import Counter
 from typing import Any, Optional
 
 from .evidence import parse_date
 from .models import EvidenceItem, ImageAnalysis, ImageMatch
 from .sources import classify_domain, domain_of
+
+_YEAR_RE = re.compile(r"\b(19[5-9]\d|20[0-4]\d)\b")
+
+
+def _title_year_hint(matches: list[ImageMatch]) -> Optional[int]:
+    """Years that match *titles* keep mentioning are a strong era signal even
+    when Lens returns no dates ('2004 Indian Ocean tsunami - Wikipedia')."""
+    years = [int(y) for m in matches for y in _YEAR_RE.findall(m.title or "")]
+    if not years:
+        return None
+    counts = Counter(years)
+    year, _n = max(counts.items(), key=lambda kv: (kv[1], -kv[0]))
+    return year
 
 
 def analyze_lens(image_url: str, raw: dict[str, Any]) -> ImageAnalysis:
@@ -34,6 +49,7 @@ def analyze_lens(image_url: str, raw: dict[str, Any]) -> ImageAnalysis:
     dated = [m for m in matches if m.date is not None]
     earliest = min(dated, key=lambda m: m.date) if dated else None  # type: ignore[arg-type]
     domains = {m.domain for m in matches if m.domain}
+    year_hint = _title_year_hint(matches)
 
     note: Optional[str] = None
     if earliest and earliest.date:
@@ -42,6 +58,13 @@ def analyze_lens(image_url: str, raw: dict[str, Any]) -> ImageAnalysis:
             f"dated appearance is {earliest.date.date().isoformat()} on "
             f"{earliest.domain or 'an unknown site'}. If the forward presents it as a "
             f"current event, that date is the tell."
+        )
+    elif matches and year_hint:
+        note = (
+            f"This image appears on {len(matches)} other pages across "
+            f"{len(domains)} sites. None carried a machine-readable date, but the "
+            f"match titles repeatedly reference {year_hint} — likely the image's "
+            f"true era, not today."
         )
     elif matches:
         note = (
@@ -61,6 +84,7 @@ def analyze_lens(image_url: str, raw: dict[str, Any]) -> ImageAnalysis:
         distinct_domains=len(domains),
         earliest_date=earliest.date if earliest else None,
         earliest_domain=earliest.domain if earliest else None,
+        title_year_hint=year_hint,
         note=note,
     )
 
